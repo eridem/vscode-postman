@@ -8,16 +8,16 @@ Postman Runner for VSCode allows you to run Postman tests from your VSCode. It a
 - Open the `Command Palette`
 - Choose `Postman > Run > Question Mode`
 
-![Command palette image](images/command-palette.png)
+![Command palette image](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/command-palette.png?)
 
 # Current features
 
 - `Postman > Run > Question Mode`: It will ask you questions about how to trigger your tests. The bottom toolbar will show you the results of them.
 
-![Running tests](images/toolbar-choosing.gif)
+![Running tests](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/toolbar-choosing.gif)
 - Display results on the toolbar
 
-![Running tests](images/toolbar-running.gif)
+![Running tests](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/toolbar-running.gif)
 
 
 # Future features
@@ -30,8 +30,8 @@ Postman Runner for VSCode allows you to run Postman tests from your VSCode. It a
 
 Export your collections and environment files from Postman to a directory or subdirectories:
 
-![Exporting collections image](images/export-collection.png)
-![Exporting environments image](images/export-environments.png)
+![Exporting collections image](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/export-collection.png)
+![Exporting environments image](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/export-environments.png)
 
 ## Known Issues
 
