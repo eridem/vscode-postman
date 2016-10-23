@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import * as models from '../models.d';
 import * as utils from '../utils';
 import * as newman from '../exec-newman';
+declare var require: any
 
 export class RunnerRunQuestionMode implements models.ICommand {
     private COLLECTION_EXTENSION = "postman_collection.json";
@@ -56,7 +57,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private getCollectionFiles(): Promise<void> {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
             vscode.workspace.findFiles(`*.${this.COLLECTION_EXTENSION}`, "").then((files) => {
                 // Save value
                 this._collectionFiles = files;
@@ -66,7 +67,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private errorIfNotCollectionsFound(): Promise<void> {
-        return new Promise((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             // Show message if no collection files found
             if (this._collectionFiles.length === 0) {
                 vscode.window.showInformationMessage(`No files with extension "${this.COLLECTION_EXTENSION}" found.`);
@@ -77,7 +78,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private getEnvironmentFiles(): Promise<void> {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
             vscode.workspace.findFiles(`*.${this.ENVIRONMENT_EXTENSION}`, "").then((files) => {
                 // Save value
                 this._environmentFiles = files;
@@ -88,7 +89,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private askForCollections(): Promise<void> {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
             let fileNames = this.getOnlyFileNames(this._collectionFiles);
 
             vscode.window.showQuickPick(fileNames, { placeHolder: 'Collection files' }).then((value) => {
@@ -101,7 +102,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private askForFolder(): Promise<void> {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
             // Get folders for collection
             let collection = require(this._collectionFile)
             let folders = [this.ALL_TEXT, ...collection.item.map((f) => f.name)]
@@ -116,7 +117,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private askForInteractions(): Promise<void> {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
             vscode.window.showInputBox({ placeHolder: `Number of iteractions (default: ${this.DEFAULT_NR_INTERACTIONS})` }).then((value) => {
                 // Save value
                 this._iteractions = parseInt(value) || this.DEFAULT_NR_INTERACTIONS
@@ -127,7 +128,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private askForDelay(): Promise<void> {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
             vscode.window.showInputBox({ placeHolder: `Delay (default: ${this.DEFAULT_DELAY})` }).then((value) => {
                 // Save value
                 this._delay = parseInt(value) || this.DEFAULT_DELAY;
@@ -138,7 +139,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private askForEnvironments(): Promise<void> {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
             if (!this._environmentFiles) return resolve();
 
             let fileNames = this.getOnlyFileNames(this._environmentFiles);

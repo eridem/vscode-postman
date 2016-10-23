@@ -1,3 +1,5 @@
+declare var require: any
+
 import * as models from './models.d';
 import * as vscode from 'vscode';
 const { join } = require('path');
