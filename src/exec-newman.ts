@@ -2,7 +2,6 @@ declare var require: any
 
 import * as models from './models.d';
 import * as vscode from 'vscode';
-const { join } = require('path');
 
 let _toolbarItem: vscode.StatusBarItem;
 
@@ -14,6 +13,8 @@ function execNewman(opts: models.INewManOpts, toolbarItem: vscode.StatusBarItem)
     const newman = require('newman');
     _toolbarItem = toolbarItem;
 
+    changeToolbar('Preparing tests...');
+    
     newman.run({
         collection: require(opts.collection),
         environment: require(opts.environment),

@@ -23,22 +23,33 @@ export class RunnerRunQuestionMode implements models.ICommand {
     private _iteractions: number;
     private _delay: number;
 
+    public cleanUp(): void {
+        this._collectionFiles = null;
+        this._environmentFiles = null;
+        this._collectionFile = null;
+        this._folder = null;
+        this._environmentFile = null;
+        this._iteractions = null;
+        this._delay = null;
+    }
+
     public subscribe(context: vscode.ExtensionContext, toolbarItem: vscode.StatusBarItem) {
         console.log('Registering: RunnerRunQuestionMode');
         this._toolbarItem = toolbarItem;
 
         let disposable = vscode.commands.registerCommand('extension.question-mode', () => {
             try {
-            this.getCollectionFiles()
-                .then(() => this.errorIfNotCollectionsFound()
-                .then(() => this.askForCollections()
-                .then(() => this.askForFolder()
-                .then(() => this.getEnvironmentFiles()
-                .then(() => this.askForEnvironments()
-                .then(() => this.askForInteractions()
-                .then(() => this.askForDelay()
-                .then(() => this.onDoneWithQuestions()
-                ))))))))
+                this.cleanUp();
+                this.getCollectionFiles()
+                    .then(() => this.errorIfNotCollectionsFound()
+                    .then(() => this.askForCollections()
+                    .then(() => this.askForFolder()
+                    .then(() => this.getEnvironmentFiles()
+                    .then(() => this.askForEnvironments()
+                    .then(() => this.askForInteractions()
+                    .then(() => this.askForDelay()
+                    .then(() => this.onDoneWithQuestions()
+                    ))))))));
             } catch(ex) {
                 console.error(ex);
             }
@@ -53,7 +64,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
         let rootPath = vscode.workspace.rootPath;
         let fileNames = files.map((f) => f.fsPath.replace(rootPath, ""));
         let fileNamesSort = fileNames.sort(utils.sortTextAlphabeticallyFn);
-        return fileNames;
+        return fileNamesSort;
     }
 
     private getCollectionFiles(): Promise<void> {
@@ -101,11 +112,31 @@ export class RunnerRunQuestionMode implements models.ICommand {
         })
     }
 
+    private getFoldersForVersion1(collection:any):Array<string> {
+        return collection.folders.map(f => f.name)
+    }
+
+    private getFoldersForVersion2(collection:any):Array<string> {
+        return collection.item.filter(f => f.item).map(f => f.name)
+    }
+
     private askForFolder(): Promise<void> {
         return new Promise<void>((resolve) => {
-            // Get folders for collection
+            // Parse collection
             let collection = require(this._collectionFile)
-            let folders = [this.ALL_TEXT, ...collection.item.map((f) => f.name)]
+            let folders = []
+
+            // Filter by version of the collection
+            if (collection.folders || collection.requests) {
+                folders = [this.ALL_TEXT, ...this.getFoldersForVersion1(collection)];
+            } else {
+                folders = [this.ALL_TEXT, ...this.getFoldersForVersion2(collection)];
+            }
+
+            // If not folders, skip step
+            if (folders.length === 1) {
+                return resolve();
+            }
 
             vscode.window.showQuickPick(folders, { placeHolder: 'Folders' }).then((value) => {
                 // Save value
