@@ -49,7 +49,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
                     .then(() => this.askForInteractions()
                     .then(() => this.askForDelay()
                     .then(() => this.onDoneWithQuestions()
-                    ))))))));
+                    )))))))).catch(e => console.error);
             } catch(ex) {
                 console.error(ex);
             }
