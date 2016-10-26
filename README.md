@@ -19,6 +19,10 @@ Postman Runner for VSCode allows you to run Postman tests from your VSCode. It a
 
 ![Running tests](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/toolbar-running.gif)
 
+- Show results on VSCode output
+
+![Running tests](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/console-running.gif)
+
 
 # Future features
 
@@ -39,9 +43,19 @@ Export your collections and environment files from Postman to a directory or sub
 
 ## Release Notes
 
-### 1.0.0
+### 0.0.5
 
-Initial release, few features but happy with the idea.
+- Feature: show results on the output
+
+### 0.0.4
+
+- Fix bug: now it is compatible with collections v1 and v2.
+- It will not ask for folder if not folders are in the collection.
+
+### 0.0.2
+
+- Initial release, few features but happy with the idea.
+
 
 # Copyright
 
