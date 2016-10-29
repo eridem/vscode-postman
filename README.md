@@ -1,49 +1,45 @@
+***NOTE***: *Please report your issues in <https://github.com/eridem/vscode-postman/issues> before negative feedback and I will help you out :-)*
+
 # Postman Runner for VSCode
 
-***NOTE***: *This extension has been recently create and it is still in Beta and new features will come, please report your issues in <https://github.com/eridem/vscode-postman/issues> before negative feedback and I will help you out :-)*
+Postman Runner for VSCode allows you to run [Postman](https://www.getpostman.com/) tests from your VSCode. It analyze the workspace folder and locate *collection* and *environment* files.
 
-Postman Runner for VSCode allows you to run Postman tests from your VSCode. It analyze the workspace folder and locate *collection* and *environment* files.
-
-- Open VSCode on the folder or parent folder where collections and environments have been exported (section *Exporting collections and environments*)
+- Export your Postman *collections* and *environments* in a folder (or subfolders) and open it with VSCode.
 - Open the `Command Palette`
-- Choose `Postman > Run > Question Mode`
+- Choose `Postman: Run > Question Mode` ( `Ctrl+Q` , `Cmd+Q` )
 
-![Command palette image](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/command-palette.png?)
+![Command palette image](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/command-palette.png)
 
 # Current features
 
-- `Postman > Run > Question Mode`: It will ask you questions about how to trigger your tests. The bottom toolbar will show you the results of them.
+- Compatible with Postman collections exported as `v1` or `v2`.
+- Question mode: `Postman: Run > Question Mode` ( `Ctrl+Q` , `Cmd+Q` ): It will ask you several quick questions to run your tests.
 
 ![Running tests](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/toolbar-choosing.gif)
-- Display results on the toolbar
-
-![Running tests](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/toolbar-running.gif)
-
-- Show results on VSCode output
+- Displaying results: It will display the results in a new VSCode output window and the toolbar:
 
 ![Running tests](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/console-running.gif)
 
-
 # Future features
 
-- Show better reports
+- Colors on reports
+- Export reports
+- Default `delay` and `iteractions` on settings.
 - Integration with the `Debug configurations`
 - From your feedback: <https://github.com/eridem/vscode-postman/issues>
 
-# * Exporting collections and environments
-
-Export your collections and environment files from Postman to a directory or subdirectories:
-
-![Exporting collections image](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/export-collection.png)
-![Exporting environments image](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/export-environments.png)
-
-## Known Issues
+# Known Issues
 
 <https://github.com/eridem/vscode-postman/issues>
 
-## Release Notes
+# Release Notes
 
-### 0.0.5
+### 0.3.0
+
+- Feature: Add shortcuts `Ctrl+Q` or `Cmd+Q`
+- Improvement: add category `Postman` to the *Command Palette*
+
+### 0.2.0
 
 - Feature: show results on the output
 
@@ -62,3 +58,9 @@ Export your collections and environment files from Postman to a directory or sub
 Copyright (c) 2016 [Miguel Ángel Domínguez Coloma](http://eridem.net)
 
 Licensed under [the MIT License](./LICENSE).
+
+# *EXTRA Exporting collections and environments
+
+![Exporting collections image](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/export-collection.png)
+
+![Exporting environments image](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/export-environments.png)

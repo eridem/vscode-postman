@@ -2,7 +2,7 @@
     "name": "vscode-postman",
     "displayName": "Postman Runner",
     "description": "Run Postman tests directly from your VSCode",
-    "version": "0.0.4",
+    "version": "0.3.0",
     "publisher": "eridem",
     "author": {
         "name": "Miguel Ángel Domínguez Coloma",
@@ -35,7 +35,15 @@
         "commands": [
             {
                 "command": "extension.question-mode",
-                "title": "Postman > Run > Question Mode"
+                "title": "Run > Question Mode",
+                "category": "Postman"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "extension.question-mode",
+                "key": "ctrl+q",
+                "mac": "cmd+q"
             }
         ]
     },
