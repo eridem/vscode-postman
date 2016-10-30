@@ -49,15 +49,15 @@ export class RunnerRunQuestionMode implements models.ICommand {
                     .then(() => this.askForInteractions()
                     .then(() => this.askForDelay()
                     .then(() => this.onDoneWithQuestions()
-                    )))))))).catch(e => console.error);
-            } catch(ex) {
+                )))))))).catch(e => console.error);
+            } catch (ex) {
                 console.error(ex);
             }
         });
         context.subscriptions.push(disposable)
     }
 
-//region Private
+    //region Private
 
     private getOnlyFileNames(files: Array<vscode.Uri>) {
         // Get just names of files
@@ -68,7 +68,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private getCollectionFiles(): Promise<void> {
-        return new Promise<void>((resolve) => {
+        return new Promise<void>((resolve, reject) => {
             vscode.workspace.findFiles(`*.${this.COLLECTION_EXTENSION}`, "").then((files) => {
                 // Save value
                 this._collectionFiles = files;
@@ -89,7 +89,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private getEnvironmentFiles(): Promise<void> {
-        return new Promise<void>((resolve) => {
+        return new Promise<void>((resolve, reject) => {
             vscode.workspace.findFiles(`*.${this.ENVIRONMENT_EXTENSION}`, "").then((files) => {
                 // Save value
                 this._environmentFiles = files;
@@ -100,10 +100,14 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private askForCollections(): Promise<void> {
-        return new Promise<void>((resolve) => {
+        return new Promise<void>((resolve, reject) => {
             let fileNames = this.getOnlyFileNames(this._collectionFiles);
 
             vscode.window.showQuickPick(fileNames, { placeHolder: 'Collection files' }).then((value) => {
+                if (!value) {
+                    return reject();
+                }
+
                 // Save value
                 this._collectionFile = vscode.workspace.rootPath + value;
 
@@ -112,16 +116,16 @@ export class RunnerRunQuestionMode implements models.ICommand {
         })
     }
 
-    private getFoldersForVersion1(collection:any):Array<string> {
+    private getFoldersForVersion1(collection: any): Array<string> {
         return collection.folders.map(f => f.name)
     }
 
-    private getFoldersForVersion2(collection:any):Array<string> {
+    private getFoldersForVersion2(collection: any): Array<string> {
         return collection.item.filter(f => f.item).map(f => f.name)
     }
 
     private askForFolder(): Promise<void> {
-        return new Promise<void>((resolve) => {
+        return new Promise<void>((resolve, reject) => {
             // Parse collection
             let collection = require(this._collectionFile)
             let folders = []
@@ -139,6 +143,10 @@ export class RunnerRunQuestionMode implements models.ICommand {
             }
 
             vscode.window.showQuickPick(folders, { placeHolder: 'Folders' }).then((value) => {
+                if (!value) {
+                    return reject();
+                }
+
                 // Save value
                 this._folder = value === this.ALL_TEXT ? null : value;
 
@@ -148,8 +156,19 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private askForInteractions(): Promise<void> {
-        return new Promise<void>((resolve) => {
-            vscode.window.showInputBox({ placeHolder: `Number of iteractions (default: ${this.DEFAULT_NR_INTERACTIONS})` }).then((value) => {
+        return new Promise<void>((resolve, reject) => {
+            vscode.window.showInputBox({
+                value: '1',
+                prompt: `Number of iteractions (default: ${this.DEFAULT_NR_INTERACTIONS})`,
+                placeHolder: `Number of iteractions (default: ${this.DEFAULT_NR_INTERACTIONS})`
+            }).then((value) => {
+                if (value === null || value === undefined) {
+                    return reject();
+                }
+                if (value === '') {
+                    value = '1';
+                }
+
                 // Save value
                 this._iteractions = parseInt(value) || this.DEFAULT_NR_INTERACTIONS
 
@@ -159,8 +178,19 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private askForDelay(): Promise<void> {
-        return new Promise<void>((resolve) => {
-            vscode.window.showInputBox({ placeHolder: `Delay (default: ${this.DEFAULT_DELAY})` }).then((value) => {
+        return new Promise<void>((resolve, reject) => {
+            vscode.window.showInputBox({
+                value: '0',
+                prompt: `Delay (default: ${this.DEFAULT_DELAY})`,
+                placeHolder: `Delay (default: ${this.DEFAULT_DELAY})`
+            }).then((value) => {
+                if (value === null || value === undefined) {
+                    return reject();
+                }
+                if (value === '') {
+                    value = '0';
+                }
+
                 // Save value
                 this._delay = parseInt(value) || this.DEFAULT_DELAY;
 
@@ -170,11 +200,17 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private askForEnvironments(): Promise<void> {
-        return new Promise<void>((resolve) => {
-            if (!this._environmentFiles) return resolve();
+        return new Promise<void>((resolve, reject) => {
+            if (!this._environmentFiles || this._environmentFiles.length === 0) {
+                return resolve();
+            }
 
             let fileNames = this.getOnlyFileNames(this._environmentFiles);
             vscode.window.showQuickPick(fileNames, { placeHolder: 'Environments' }).then((value) => {
+                if (!value) {
+                    return reject();
+                }
+
                 // Save value
                 this._environmentFile = vscode.workspace.rootPath + value;
 
@@ -195,5 +231,5 @@ export class RunnerRunQuestionMode implements models.ICommand {
         newman.execNewman(newmanOptions, this._toolbarItem);
     }
 
-//endregion
+    //endregion
 }

@@ -2,7 +2,7 @@
     "name": "vscode-postman",
     "displayName": "Postman Runner",
     "description": "Run Postman tests directly from your VSCode",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "publisher": "eridem",
     "author": {
         "name": "Miguel Ángel Domínguez Coloma",

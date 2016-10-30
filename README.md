@@ -34,6 +34,10 @@ Postman Runner for VSCode allows you to run [Postman](https://www.getpostman.com
 
 # Release Notes
 
+### 0.3.1
+
+- Improvement: cancel any question with ESC
+
 ### 0.3.0
 
 - Feature: Add shortcuts `Ctrl+Q` or `Cmd+Q`
