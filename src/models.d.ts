@@ -10,4 +10,5 @@ export interface INewManOpts {
     environment: string;
     iteractions: number;
     delay: number;
+    data: string;
 }

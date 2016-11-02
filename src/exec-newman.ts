@@ -42,10 +42,11 @@ function execNewman(opts: models.INewManOpts, toolbarItem: vscode.StatusBarItem)
 
     newman.run({
         collection: require(opts.collection),
-        environment: require(opts.environment),
+        environment: opts.environment ? require(opts.environment) : null,
         folder: opts.folder,
         delayRequest: opts.delay,
-        iterationCount: opts.iteractions
+        iterationCount: opts.iteractions,
+        iterationData: opts.data
     })
         .on('beforeItem', function (err, args) {
             if (_latestFolder !== args.item.__parent.__parent.name) {

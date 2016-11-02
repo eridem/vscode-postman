@@ -8,7 +8,11 @@ declare var require: any
 export class RunnerRunQuestionMode implements models.ICommand {
     private COLLECTION_EXTENSION = "postman_collection.json";
     private ENVIRONMENT_EXTENSION = "postman_environment.json";
+    private DEFAULT_EXCLUDES = "**/node_modules/**";
+    private DATA_INCLUDE_QUERY = `**/*.{csv,json}`;
+    private DATA_EXCLUDE_QUERY = `{${this.DEFAULT_EXCLUDES},**/*.${this.COLLECTION_EXTENSION},**/*.${this.ENVIRONMENT_EXTENSION}}`;
     private ALL_TEXT = '- ALL -';
+    private NONE_TEXT = '- NONE -';
     private DEFAULT_NR_INTERACTIONS: number = 1;
     private DEFAULT_DELAY: number = 0;
 
@@ -16,21 +20,25 @@ export class RunnerRunQuestionMode implements models.ICommand {
 
     private _collectionFiles: Array<vscode.Uri>;
     private _environmentFiles: Array<vscode.Uri>;
+    private _dataFiles: Array<vscode.Uri>;
 
     private _collectionFile: string;
     private _folder: string;
     private _environmentFile: string;
     private _iteractions: number;
     private _delay: number;
+    private _dataFile: string;
 
     public cleanUp(): void {
         this._collectionFiles = null;
         this._environmentFiles = null;
+        this._dataFiles = null;
         this._collectionFile = null;
         this._folder = null;
         this._environmentFile = null;
         this._iteractions = null;
         this._delay = null;
+        this._dataFile = null;
     }
 
     public subscribe(context: vscode.ExtensionContext, toolbarItem: vscode.StatusBarItem) {
@@ -48,8 +56,10 @@ export class RunnerRunQuestionMode implements models.ICommand {
                     .then(() => this.askForEnvironments()
                     .then(() => this.askForInteractions()
                     .then(() => this.askForDelay()
+                    .then(() => this.getDataFiles()
+                    .then(() => this.askForDataFile()
                     .then(() => this.onDoneWithQuestions()
-                )))))))).catch(e => console.error);
+                    )))))))))).catch(e => console.error);
             } catch (ex) {
                 console.error(ex);
             }
@@ -69,7 +79,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
 
     private getCollectionFiles(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            vscode.workspace.findFiles(`*.${this.COLLECTION_EXTENSION}`, "").then((files) => {
+            vscode.workspace.findFiles(`*.${this.COLLECTION_EXTENSION}`, this.DEFAULT_EXCLUDES).then((files) => {
                 // Save value
                 this._collectionFiles = files;
                 resolve();
@@ -90,9 +100,20 @@ export class RunnerRunQuestionMode implements models.ICommand {
 
     private getEnvironmentFiles(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            vscode.workspace.findFiles(`*.${this.ENVIRONMENT_EXTENSION}`, "").then((files) => {
+            vscode.workspace.findFiles(`*.${this.ENVIRONMENT_EXTENSION}`, this.DEFAULT_EXCLUDES).then((files) => {
                 // Save value
                 this._environmentFiles = files;
+
+                resolve();
+            });
+        })
+    }
+
+    private getDataFiles(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            vscode.workspace.findFiles(this.DATA_INCLUDE_QUERY, this.DATA_EXCLUDE_QUERY).then((files) => {
+                // Save value
+                this._dataFiles = files;
 
                 resolve();
             });
@@ -219,13 +240,35 @@ export class RunnerRunQuestionMode implements models.ICommand {
         })
     }
 
+    private askForDataFile(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            if (!this._dataFiles || this._dataFiles.length === 0) {
+                return resolve();
+            }
+
+            let fileNames = [this.NONE_TEXT, ...this.getOnlyFileNames(this._dataFiles)];
+
+            vscode.window.showQuickPick(fileNames, { placeHolder: 'Data files' }).then((value) => {
+                if (!value) {
+                    return reject();
+                }
+
+                // Save value
+                this._dataFile = value === this.NONE_TEXT ? null : vscode.workspace.rootPath + value;
+
+                resolve();
+            });
+        })
+    }
+
     private onDoneWithQuestions(): void {
         const newmanOptions: models.INewManOpts = {
             collection: this._collectionFile,
             folder: this._folder,
             environment: this._environmentFile,
             iteractions: this._iteractions,
-            delay: this._delay
+            delay: this._delay,
+            data: this._dataFile
         }
 
         newman.execNewman(newmanOptions, this._toolbarItem);

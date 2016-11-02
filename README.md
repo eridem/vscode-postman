@@ -34,13 +34,18 @@ Postman Runner for VSCode allows you to run [Postman](https://www.getpostman.com
 
 # Release Notes
 
+### 0.4.0
+
+- Feature: add Data files support (CSV and JSON)
+- BugFix: there was a bug that did not allow to start tests without environments. Fixed!
+
 ### 0.3.1
 
 - Improvement: cancel any question with ESC
 
 ### 0.3.0
 
-- Feature: Add shortcuts `Ctrl+Q` or `Cmd+Q`
+- Feature: add shortcuts `Ctrl+Q` or `Cmd+Q`
 - Improvement: add category `Postman` to the *Command Palette*
 
 ### 0.2.0
@@ -49,13 +54,12 @@ Postman Runner for VSCode allows you to run [Postman](https://www.getpostman.com
 
 ### 0.0.4
 
-- Fix bug: now it is compatible with collections v1 and v2.
-- It will not ask for folder if not folders are in the collection.
+- BugFix: now it is compatible with collections v1 and v2
+- Improvement: it will not ask for folder if not folders are in the collection
 
 ### 0.0.2
 
-- Initial release, few features but happy with the idea.
-
+- Initial release, few features but happy with the idea
 
 # Copyright
 
