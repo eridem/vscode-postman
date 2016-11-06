@@ -1,5 +1,3 @@
-***NOTE***: *Please report your issues in <https://github.com/eridem/vscode-postman/issues> before negative feedback and I will help you out :-)*
-
 # Postman Runner for VSCode
 
 Postman Runner for VSCode allows you to run [Postman](https://www.getpostman.com/) tests from your VSCode. It analyze the workspace folder and locate *collection* and *environment* files.
@@ -34,6 +32,10 @@ Postman Runner for VSCode allows you to run [Postman](https://www.getpostman.com
 
 # Release Notes
 
+### 0.4.1
+
+- Improvement: search tags on Marketplace, homepage, ...
+
 ### 0.4.0
 
 - Feature: add Data files support (CSV and JSON)
@@ -65,7 +67,7 @@ Postman Runner for VSCode allows you to run [Postman](https://www.getpostman.com
 
 Copyright (c) 2016 [Miguel Ángel Domínguez Coloma](http://eridem.net)
 
-Licensed under [the MIT License](./LICENSE).
+Licensed under [the MIT License](./LICENSE.md).
 
 # *EXTRA Exporting collections and environments
 

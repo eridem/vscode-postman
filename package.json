@@ -2,16 +2,18 @@
     "name": "vscode-postman",
     "displayName": "Postman Runner",
     "description": "Run Postman tests directly from your VSCode",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "publisher": "eridem",
+    "keywords": [ "postman", "newman", "api", "runner", "test" ],
     "author": {
         "name": "Miguel Ángel Domínguez Coloma",
         "email": "m@eridem.net",
         "url": "http://eridem.net"
     },
+    "markdown": "github",
     "contributors": [],
-    "license": "MIT",
-    "homepage": "http://vscode-postman.eridem.net",
+    "license": "SEE LICENSE IN LICENSE.md",
+    "homepage": "http://eridem.net/postman-runner-visual-studio-code-extension/",
     "icon": "icon.svg",
     "engines": {
         "vscode": "^1.5.0"
@@ -25,8 +27,15 @@
     },
     "repository": {
         "type": "git",
-        "url": "git@github.com:eridem/vscode-postman.git"
+        "url": "https://github.com/eridem/vscode-postman.git"
     },
+	"badges": [
+		{
+			"url": "https://david-dm.org/eridem/vscode-postman/dev-status.svg",
+			"href": "https://david-dm.org/eridem/vscode-postman",
+			"description": "Dependency Status"
+		}
+	],
     "activationEvents": [
         "onCommand:extension.question-mode"
     ],
@@ -55,9 +64,7 @@
     "devDependencies": {
         "typescript": "^2.0.3",
         "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
+        "@types/node": "^6.0.40"
     },
     "dependencies": {
         "newman": "^3.2.0"
