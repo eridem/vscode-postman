@@ -1,3 +1,15 @@
+### 0.5.0
+
+- Feature: show results in a new document when the tests finish.
+- Feature: setting options to personalize extension behaviour.
+- Improvement: add info message to advice that the tests are running.
+- Improvement: `postman.showRunInfoMessage` setting to deactive info message.
+- Improvement: `postman.showResultsInNewDocument` setting to activate/deactivate generation of results document.
+- Improvement: `postman.showOutputAutomatically` setting to activate/deactivate showing automatically the output window.
+- Improvement: `postman.showProgressInToolbar` setting to activate/deactivate messages in the toolbar.
+- Improvement: `postman.testDefaultDelay` setting to set default delay for tests.
+- Improvement: `postman.testDefaultIterations` setting to set default iterations for tests.
+
 ### 0.4.1
 
 - Improvement: search tags on Marketplace, homepage, ...
