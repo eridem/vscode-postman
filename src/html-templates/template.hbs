@@ -1,0 +1,43 @@
+{{#with summary}}
+Collection: {{{collection.name}}}
+{{/with}}
+  Time: {{{timestamp}}}
+
+{{#with summary}}
+  {{#with stats}}
+  Total:
+    Iterations: {{{iterations.total}}}
+    Requests: {{{requests.total}}}
+    Prerequest Scripts: {{{prerequestScripts.total}}}
+    Test Scripts: {{{testScripts.total}}}
+    Assertions: {{{assertions.total}}}
+  Failed:
+    Iterations: {{{iterations.failed}}}
+    Requests: {{{requests.failed}}}
+    Prerequest Scripts: {{{prerequestScripts.failed}}}
+    Test Scripts: {{{testScripts.failed}}}
+    Assertions: {{{assertions.failed}}}
+  {{/with}}
+  Total Failures: {{{failures}}}
+{{/with}}
+
+  Requests:
+{{#each aggregations}}
+    {{{item.name}}}:
+      {{#with request}}
+      Method: {{{method}}}
+      Url: {{{url}}}
+      {{/with}}
+      Status code: {{{response.code}}}
+      Mean time per request: {{{mean.time}}}
+      Mean size per request: {{{mean.size}}}
+      Total passed tests: {{{cumulativeTests.passed}}}
+      Total failed tests: {{{cumulativeTests.failed}}}
+    {{#if assertions.length}}
+      Tests:
+        {{#each assertions}}
+        {{{this.name}}}: Failed({{{this.failed}}}) - Passed({{{this.passed}}})
+        {{/each}}
+    {{/if}}
+
+{{/each}}

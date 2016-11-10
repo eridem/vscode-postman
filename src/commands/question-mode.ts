@@ -3,18 +3,24 @@ import * as vscode from 'vscode';
 import * as models from '../models.d';
 import * as utils from '../utils';
 import * as newman from '../exec-newman';
+import { Config } from '../config';
+
 declare var require: any
 
 export class RunnerRunQuestionMode implements models.ICommand {
+    private _config: Config;
+
     private COLLECTION_EXTENSION = "postman_collection.json";
+    private COLLECTION_QUERY = `{**/*.${this.COLLECTION_EXTENSION},${this.COLLECTION_EXTENSION}}`;
     private ENVIRONMENT_EXTENSION = "postman_environment.json";
+    private ENVIRONMENT_QUERY = `{**/*.${this.ENVIRONMENT_EXTENSION},${this.ENVIRONMENT_EXTENSION}}`;
     private DEFAULT_EXCLUDES = "**/node_modules/**";
     private DATA_INCLUDE_QUERY = `**/*.{csv,json}`;
-    private DATA_EXCLUDE_QUERY = `{${this.DEFAULT_EXCLUDES},**/*.${this.COLLECTION_EXTENSION},**/*.${this.ENVIRONMENT_EXTENSION}}`;
+    private DATA_EXCLUDE_QUERY = `{${this.DEFAULT_EXCLUDES},${this.COLLECTION_EXTENSION},**/*.${this.COLLECTION_EXTENSION},${this.ENVIRONMENT_EXTENSION},**/*.${this.ENVIRONMENT_EXTENSION}}`;
     private ALL_TEXT = '- ALL -';
     private NONE_TEXT = '- NONE -';
-    private DEFAULT_NR_INTERACTIONS: number = 1;
-    private DEFAULT_DELAY: number = 0;
+    private DEFAULT_NR_INTERACTIONS: number;
+    private DEFAULT_DELAY: number;
 
     private _toolbarItem: vscode.StatusBarItem;
 
@@ -30,6 +36,9 @@ export class RunnerRunQuestionMode implements models.ICommand {
     private _dataFile: string;
 
     public cleanUp(): void {
+        this._config = new Config();
+        this.DEFAULT_DELAY = this._config.testDefaultDelay;
+        this.DEFAULT_NR_INTERACTIONS = this._config.testDefaultIterations;
         this._collectionFiles = null;
         this._environmentFiles = null;
         this._dataFiles = null;
@@ -79,7 +88,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
 
     private getCollectionFiles(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            vscode.workspace.findFiles(`*.${this.COLLECTION_EXTENSION}`, this.DEFAULT_EXCLUDES).then((files) => {
+            vscode.workspace.findFiles(this.COLLECTION_QUERY, this.DEFAULT_EXCLUDES).then((files) => {
                 // Save value
                 this._collectionFiles = files;
                 resolve();
@@ -100,7 +109,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
 
     private getEnvironmentFiles(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            vscode.workspace.findFiles(`*.${this.ENVIRONMENT_EXTENSION}`, this.DEFAULT_EXCLUDES).then((files) => {
+            vscode.workspace.findFiles(this.ENVIRONMENT_QUERY, this.DEFAULT_EXCLUDES).then((files) => {
                 // Save value
                 this._environmentFiles = files;
 
@@ -179,7 +188,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
     private askForInteractions(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             vscode.window.showInputBox({
-                value: '1',
+                value: this.DEFAULT_NR_INTERACTIONS.toString(),
                 prompt: `Number of iteractions (default: ${this.DEFAULT_NR_INTERACTIONS})`,
                 placeHolder: `Number of iteractions (default: ${this.DEFAULT_NR_INTERACTIONS})`
             }).then((value) => {
@@ -187,7 +196,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
                     return reject();
                 }
                 if (value === '') {
-                    value = '1';
+                    value = this.DEFAULT_NR_INTERACTIONS.toString();
                 }
 
                 // Save value
@@ -201,7 +210,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
     private askForDelay(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             vscode.window.showInputBox({
-                value: '0',
+                value: this.DEFAULT_DELAY.toString(),
                 prompt: `Delay (default: ${this.DEFAULT_DELAY})`,
                 placeHolder: `Delay (default: ${this.DEFAULT_DELAY})`
             }).then((value) => {
@@ -209,7 +218,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
                     return reject();
                 }
                 if (value === '') {
-                    value = '0';
+                    value = this.DEFAULT_DELAY.toString();
                 }
 
                 // Save value
@@ -226,14 +235,14 @@ export class RunnerRunQuestionMode implements models.ICommand {
                 return resolve();
             }
 
-            let fileNames = this.getOnlyFileNames(this._environmentFiles);
+            let fileNames = [this.NONE_TEXT, ...this.getOnlyFileNames(this._environmentFiles)];
             vscode.window.showQuickPick(fileNames, { placeHolder: 'Environments' }).then((value) => {
                 if (!value) {
                     return reject();
                 }
 
                 // Save value
-                this._environmentFile = vscode.workspace.rootPath + value;
+                this._environmentFile = value === this.NONE_TEXT ? null : vscode.workspace.rootPath + value;
 
                 resolve();
             });
@@ -271,7 +280,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
             data: this._dataFile
         }
 
-        newman.execNewman(newmanOptions, this._toolbarItem);
+        newman.execNewman(newmanOptions, this._toolbarItem, this._config);
     }
 
     //endregion

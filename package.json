@@ -1,72 +1,115 @@
 {
-    "name": "vscode-postman",
-    "displayName": "Postman Runner",
-    "description": "Run Postman tests directly from your VSCode",
-    "version": "0.4.1",
-    "publisher": "eridem",
-    "keywords": [ "postman", "newman", "api", "runner", "test" ],
-    "author": {
-        "name": "Miguel Ángel Domínguez Coloma",
-        "email": "m@eridem.net",
-        "url": "http://eridem.net"
-    },
-    "markdown": "github",
-    "contributors": [],
-    "license": "SEE LICENSE IN LICENSE.md",
-    "homepage": "http://eridem.net/postman-runner-visual-studio-code-extension/",
-    "icon": "icon.svg",
-    "engines": {
-        "vscode": "^1.5.0"
-    },
-    "categories": [
-        "Other"
-    ],
-    "bugs": {
-        "url": "https://github.com/eridem/vscode-postman/issues",
-        "email": "m@eridem.net"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/eridem/vscode-postman.git"
-    },
-	"badges": [
-		{
-			"url": "https://david-dm.org/eridem/vscode-postman/dev-status.svg",
-			"href": "https://david-dm.org/eridem/vscode-postman",
-			"description": "Dependency Status"
-		}
-	],
-    "activationEvents": [
-        "onCommand:extension.question-mode"
-    ],
-    "main": "./out/src/extension",
-    "contributes": {
-        "commands": [
-            {
-                "command": "extension.question-mode",
-                "title": "Run > Question Mode",
-                "category": "Postman"
-            }
-        ],
-        "keybindings": [
-            {
-                "command": "extension.question-mode",
-                "key": "ctrl+q",
-                "mac": "cmd+q"
-            }
-        ]
-    },
-    "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install"
-    },
-    "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
-        "@types/node": "^6.0.40"
-    },
-    "dependencies": {
-        "newman": "^3.2.0"
+  "name": "vscode-postman",
+  "displayName": "Postman Runner",
+  "description": "Run Postman tests directly from your VSCode",
+  "version": "0.4.1",
+  "publisher": "eridem",
+  "keywords": [
+    "postman",
+    "newman",
+    "api",
+    "runner",
+    "test"
+  ],
+  "author": {
+    "name": "Miguel Ángel Domínguez Coloma",
+    "email": "m@eridem.net",
+    "url": "http://eridem.net"
+  },
+  "markdown": "github",
+  "contributors": [],
+  "license": "SEE LICENSE IN LICENSE.md",
+  "homepage": "http://eridem.net/postman-runner-visual-studio-code-extension/",
+  "icon": "icon.svg",
+  "engines": {
+    "vscode": "^1.5.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "bugs": {
+    "url": "https://github.com/eridem/vscode-postman/issues",
+    "email": "m@eridem.net"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eridem/vscode-postman.git"
+  },
+  "badges": [
+    {
+      "url": "https://david-dm.org/eridem/vscode-postman/dev-status.svg",
+      "href": "https://david-dm.org/eridem/vscode-postman",
+      "description": "Dependency Status"
     }
+  ],
+  "activationEvents": [
+    "onCommand:extension.question-mode"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.question-mode",
+        "title": "Run > Question Mode",
+        "category": "Postman"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "extension.question-mode",
+        "key": "ctrl+q",
+        "mac": "cmd+q"
+      }
+    ]
+  },
+  "configuration": {
+    "title": "Postman Runner | Configuration",
+    "type": "object",
+    "properties": {
+      "postman.showRunInfoMessage": {
+        "type": "boolean",
+        "default": true,
+        "description": "Show info message before start running a test."
+      },
+      "postman.showResultsInNewDocument": {
+        "type": "boolean",
+        "default": true,
+        "description": "On finish, open automatically a document with the results."
+      },
+      "postman.showOutputAutomatically": {
+        "type": "boolean",
+        "default": true,
+        "description": "Open up automatically the Output window showing the progress."
+      },
+      "postman.showProgressInToolbar": {
+        "type": "boolean",
+        "default": true,
+        "description": "Show or hide the progress and results from the bottom toolbar."
+      },
+      "postman.testDefaultDelay": {
+        "type": "number",
+        "default": true,
+        "description": "Set default delay for tests when asking questions."
+      },
+      "postman.testDefaultIterations": {
+        "type": "number",
+        "default": true,
+        "description": "Set default iteractions for tests when asking questions."
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "typescript": "^2.0.3",
+    "vscode": "^1.0.0",
+    "@types/node": "^6.0.40"
+  },
+  "dependencies": {
+    "newman": "^3.2.0",
+    "shelljs": "^0.7.5"
+  }
 }
