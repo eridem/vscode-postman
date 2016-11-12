@@ -2,7 +2,7 @@
   "name": "vscode-postman",
   "displayName": "Postman Runner",
   "description": "Run Postman tests directly from your VSCode",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "publisher": "eridem",
   "keywords": [
     "postman",
@@ -60,41 +60,41 @@
         "key": "ctrl+q",
         "mac": "cmd+q"
       }
-    ]
-  },
-  "configuration": {
-    "title": "Postman Runner | Configuration",
-    "type": "object",
-    "properties": {
-      "postman.showRunInfoMessage": {
-        "type": "boolean",
-        "default": true,
-        "description": "Show info message before start running a test."
-      },
-      "postman.showResultsInNewDocument": {
-        "type": "boolean",
-        "default": true,
-        "description": "On finish, open automatically a document with the results."
-      },
-      "postman.showOutputAutomatically": {
-        "type": "boolean",
-        "default": true,
-        "description": "Open up automatically the Output window showing the progress."
-      },
-      "postman.showProgressInToolbar": {
-        "type": "boolean",
-        "default": true,
-        "description": "Show or hide the progress and results from the bottom toolbar."
-      },
-      "postman.testDefaultDelay": {
-        "type": "number",
-        "default": true,
-        "description": "Set default delay for tests when asking questions."
-      },
-      "postman.testDefaultIterations": {
-        "type": "number",
-        "default": true,
-        "description": "Set default iteractions for tests when asking questions."
+    ],
+    "configuration": {
+      "title": "Postman Runner | Configuration",
+      "type": "object",
+      "properties": {
+        "postman.showRunInfoMessage": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show info message before start running a test."
+        },
+        "postman.showResultsInNewDocument": {
+          "type": "boolean",
+          "default": true,
+          "description": "On finish, open automatically a document with the results."
+        },
+        "postman.showOutputAutomatically": {
+          "type": "boolean",
+          "default": true,
+          "description": "Open up automatically the Output window showing the progress."
+        },
+        "postman.showProgressInToolbar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show or hide the progress and results from the bottom toolbar."
+        },
+        "postman.testDefaultDelay": {
+          "type": "number",
+          "default": true,
+          "description": "Set default delay for tests when asking questions."
+        },
+        "postman.testDefaultIterations": {
+          "type": "number",
+          "default": true,
+          "description": "Set default iteractions for tests when asking questions."
+        }
       }
     }
   },
