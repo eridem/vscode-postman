@@ -23,6 +23,7 @@ Collection: {{{collection.name}}}
 
   Requests:
 {{#each aggregations}}
+  {{#each executions}}
     {{{item.name}}}:
       {{#with request}}
       Method: {{{method}}}
@@ -39,5 +40,5 @@ Collection: {{{collection.name}}}
         {{{this.name}}}: Failed({{{this.failed}}}) - Passed({{{this.passed}}})
         {{/each}}
     {{/if}}
-
+  {{/each}}
 {{/each}}

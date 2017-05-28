@@ -1,3 +1,14 @@
+### 0.5.2
+
+- Improvement: Change Mac OSX shortcut to `Cmd+R`.
+- Improvement: Upgrade libraries to latest versions.
+- Bugfix: error with reports that may not show request information.
+- Bugfix: fix default value for `postman.testDefaultDelay` and `postman.testDefaultIterations`.
+
+### 0.5.1
+
+- Bugfix: settings was not showing correctly.
+
 ### 0.5.0
 
 - Feature: show results in a new document when the tests finish.

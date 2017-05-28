@@ -2,7 +2,7 @@
   "name": "vscode-postman",
   "displayName": "Postman Runner",
   "description": "Run Postman tests directly from your VSCode",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "publisher": "eridem",
   "keywords": [
     "postman",
@@ -58,7 +58,7 @@
       {
         "command": "extension.question-mode",
         "key": "ctrl+q",
-        "mac": "cmd+q"
+        "mac": "cmd+r"
       }
     ],
     "configuration": {
@@ -87,12 +87,12 @@
         },
         "postman.testDefaultDelay": {
           "type": "number",
-          "default": true,
+          "default": 0,
           "description": "Set default delay for tests when asking questions."
         },
         "postman.testDefaultIterations": {
           "type": "number",
-          "default": true,
+          "default": 1,
           "description": "Set default iteractions for tests when asking questions."
         }
       }
@@ -104,12 +104,12 @@
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {
+    "@types/node": "^6.0.40",
     "typescript": "^2.0.3",
-    "vscode": "^1.0.0",
-    "@types/node": "^6.0.40"
+    "vscode": "^1.0.0"
   },
   "dependencies": {
-    "newman": "^3.2.0",
-    "shelljs": "^0.7.5"
+    "newman": "^3.6.0",
+    "shelljs": "^0.7.7"
   }
 }
