@@ -20,7 +20,7 @@
   "contributors": [],
   "license": "SEE LICENSE IN LICENSE.md",
   "homepage": "http://eridem.net/postman-runner-visual-studio-code-extension/",
-  "icon": "icon.svg",
+  "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.5.0"
   },
@@ -109,7 +109,8 @@
     "vscode": "^1.0.0"
   },
   "dependencies": {
-    "newman": "^3.6.0",
-    "shelljs": "^0.7.7"
+    "newman": "^4.5.0",
+    "newman-reporter-html": "^1.0.3",
+    "shelljs": "^0.8.3"
   }
 }
