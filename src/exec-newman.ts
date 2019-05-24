@@ -47,7 +47,7 @@ function execNewman(opts: models.INewManOpts, toolbarItem: vscode.StatusBarItem,
     if (config.showResultsInNewDocument) {
         let resultsFilePath = path.join(config.resultsFileDir, './vscode-postman-results/results-' + new Date().toISOString().replace(/[-|:|Z|\.]/gi, '_').replace(/T/gi, '-') + '.yml');
         newmanOptions.reporters = ['html'];
-        newmanOptions.reporter = { html: { export: resultsFilePath, template: path.join(__dirname, '../../src/html-templates', 'template.hbs') } }
+        newmanOptions.reporter = { html: { export: resultsFilePath, template: path.join(__dirname, '../../html-templates', 'template.hbs') } }
     }
 
     newman.run(newmanOptions)

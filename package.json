@@ -2,7 +2,7 @@
   "name": "vscode-postman",
   "displayName": "Postman Runner",
   "description": "Run Postman tests directly from your VSCode",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "eridem",
   "keywords": [
     "postman",

@@ -1,3 +1,12 @@
+### 1.0.1
+
+- Bugfix: error not showing the report on vscode.
+
+### 1.0.0
+
+- Improvement: Use `newman: ^4.5.0`.
+- Improvement: Upgrade the rest of the libraries .
+
 ### 0.5.2
 
 - Improvement: Change Mac OSX shortcut to `Cmd+R`.
