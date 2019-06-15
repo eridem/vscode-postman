@@ -1,3 +1,7 @@
+### 1.0.2
+
+- Bugfix: fix Homepage url
+
 ### 1.0.1
 
 - Bugfix: error not showing the report on vscode.
