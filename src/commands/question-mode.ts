@@ -11,12 +11,12 @@ export class RunnerRunQuestionMode implements models.ICommand {
     private _config: Config;
 
     private COLLECTION_EXTENSION = "postman_collection.json";
-    private COLLECTION_QUERY = `{**/*.${this.COLLECTION_EXTENSION},${this.COLLECTION_EXTENSION}}`;
+    private COLLECTION_QUERY = `{**/*.${this.COLLECTION_EXTENSION},**/${this.COLLECTION_EXTENSION},${this.COLLECTION_EXTENSION}}`;
     private ENVIRONMENT_EXTENSION = "postman_environment.json";
-    private ENVIRONMENT_QUERY = `{**/*.${this.ENVIRONMENT_EXTENSION},${this.ENVIRONMENT_EXTENSION}}`;
+    private ENVIRONMENT_QUERY = `{**/*.${this.ENVIRONMENT_EXTENSION},**/${this.ENVIRONMENT_EXTENSION},${this.ENVIRONMENT_EXTENSION}}`;
     private DEFAULT_EXCLUDES = "**/node_modules/**";
     private DATA_INCLUDE_QUERY = `**/*.{csv,json}`;
-    private DATA_EXCLUDE_QUERY = `{${this.DEFAULT_EXCLUDES},${this.COLLECTION_EXTENSION},**/*.${this.COLLECTION_EXTENSION},${this.ENVIRONMENT_EXTENSION},**/*.${this.ENVIRONMENT_EXTENSION}}`;
+    private DATA_EXCLUDE_QUERY = `{${this.DEFAULT_EXCLUDES},${this.COLLECTION_EXTENSION},**/${this.COLLECTION_EXTENSION},**/*.${this.COLLECTION_EXTENSION},${this.ENVIRONMENT_EXTENSION},**/${this.ENVIRONMENT_EXTENSION},**/*.${this.ENVIRONMENT_EXTENSION}}`;
     private ALL_TEXT = '- ALL -';
     private NONE_TEXT = '- NONE -';
     private DEFAULT_NR_INTERACTIONS: number;
