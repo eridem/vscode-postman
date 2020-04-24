@@ -1,3 +1,8 @@
+### 2.0.0
+
+- Improvement: Use `newman: 5.0.0`.
+- Improvement: Improve the paths where the extension look for the files. By [samlikins](https://github.com/samlikins) | [#11](https://github.com/eridem/vscode-postman/pull/11)
+
 ### 1.0.2
 
 - Bugfix: fix Homepage url
@@ -9,7 +14,7 @@
 ### 1.0.0
 
 - Improvement: Use `newman: ^4.5.0`.
-- Improvement: Upgrade the rest of the libraries .
+- Improvement: Upgrade the rest of the libraries.
 
 ### 0.5.2
 
