@@ -8,7 +8,7 @@ Postman Runner for VSCode allows you to run [Postman](https://www.getpostman.com
 
 ![Command palette image](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/command-palette.png)
 
-**IMPORTANT**: From the version `2.0.0`, this extension will use `newman@~5.0.0`. If you get any issue you can downgrade it to the previous `1.0.2`. More info in [newman changelog](https://github.com/postmanlabs/newman/blob/develop/MIGRATION.md#migrating-from-v4-to-v5).
+**IMPORTANT**: From the version `2.0.0`, this extension will use `newman@5.0.0`. If you get any issue you can downgrade it to the previous `1.0.2`. More info in [newman changelog](https://github.com/postmanlabs/newman/blob/develop/MIGRATION.md#migrating-from-v4-to-v5).
 
 ## Current features
 
