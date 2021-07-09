@@ -20,6 +20,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
     private ALL_TEXT = '- ALL -';
     private NONE_TEXT = '- NONE -';
     private DEFAULT_NR_INTERACTIONS: number;
+    private DEFAULT_WORKING_DIRECTORY: string;
     private DEFAULT_DELAY: number;
 
     private _toolbarItem: vscode.StatusBarItem;
@@ -34,11 +35,13 @@ export class RunnerRunQuestionMode implements models.ICommand {
     private _iteractions: number;
     private _delay: number;
     private _dataFile: string;
+    private _workingDirectory: string;
 
     public cleanUp(): void {
         this._config = new Config();
         this.DEFAULT_DELAY = this._config.testDefaultDelay;
         this.DEFAULT_NR_INTERACTIONS = this._config.testDefaultIterations;
+        this.DEFAULT_WORKING_DIRECTORY = this._config.defaultWorkingDirectory;
         this._collectionFiles = null;
         this._environmentFiles = null;
         this._dataFiles = null;
@@ -48,6 +51,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
         this._iteractions = null;
         this._delay = null;
         this._dataFile = null;
+        this._workingDirectory = null;
     }
 
     public subscribe(context: vscode.ExtensionContext, toolbarItem: vscode.StatusBarItem) {
@@ -67,8 +71,9 @@ export class RunnerRunQuestionMode implements models.ICommand {
                     .then(() => this.askForDelay()
                     .then(() => this.getDataFiles()
                     .then(() => this.askForDataFile()
+                    .then(() => this.askForWorkingDirectory()
                     .then(() => this.onDoneWithQuestions()
-                    )))))))))).catch(e => console.error);
+                    ))))))))))).catch(e => console.error);
             } catch (ex) {
                 console.error(ex);
             }
@@ -270,6 +275,29 @@ export class RunnerRunQuestionMode implements models.ICommand {
         })
     }
 
+    private askForWorkingDirectory(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            vscode.window.showInputBox({
+                value: this.DEFAULT_WORKING_DIRECTORY.toString(),
+                prompt: `Working directory (default: ${this.DEFAULT_WORKING_DIRECTORY})`,
+                placeHolder: `Working directory (default: ${this.DEFAULT_WORKING_DIRECTORY})`
+            }).then((value) => {
+                // Save value
+                this._workingDirectory = value;
+
+                if (value === null || value === undefined) {
+                    this._workingDirectory = this.DEFAULT_WORKING_DIRECTORY;
+                }
+
+                if (value === '') {
+                    this._workingDirectory = '.'
+                }
+
+                resolve();
+            });
+        })
+    }
+
     private onDoneWithQuestions(): void {
         const newmanOptions: models.INewManOpts = {
             collection: this._collectionFile,
@@ -277,7 +305,8 @@ export class RunnerRunQuestionMode implements models.ICommand {
             environment: this._environmentFile,
             iteractions: this._iteractions,
             delay: this._delay,
-            data: this._dataFile
+            data: this._dataFile,
+            workingDirectory: this._workingDirectory
         }
 
         newman.execNewman(newmanOptions, this._toolbarItem, this._config);

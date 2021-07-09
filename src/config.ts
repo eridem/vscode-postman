@@ -9,6 +9,7 @@ export class Config {
     private _CONFIG_SHOW_PROGRESS_IN_TOOLBAR: string = 'showProgressInToolbar';
     private _CONFIG_TEST_DEFAULT_DELAY: string = 'testDefaultDelay';
     private _CONFIG_TEST_DEFAULT_ITERATIONS: string = 'testDefaultIterations';
+    private _CONFIG_WORKING_DIRECTORY: string = "workingDirectory"
 
     private _workspaceConfiguration: vscode.WorkspaceConfiguration = null;
 
@@ -45,5 +46,9 @@ export class Config {
 
     public get testDefaultIterations() {
         return this.WorkspaceConfiguration.get<number>(this._CONFIG_TEST_DEFAULT_ITERATIONS, 1);
+    }
+
+    public get defaultWorkingDirectory() {
+        return this.WorkspaceConfiguration.get<string>(this._CONFIG_WORKING_DIRECTORY, '.').trim() ?? '.';
     }
 }

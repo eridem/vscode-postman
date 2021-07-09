@@ -40,7 +40,8 @@ function execNewman(opts: models.INewManOpts, toolbarItem: vscode.StatusBarItem,
         iterationCount: opts.iteractions,
         iterationData: opts.data,
         reporters: null,
-        reporter: null
+        reporter: null,
+        workingDir: opts.workingDirectory
     };
 
     // Save results using a template

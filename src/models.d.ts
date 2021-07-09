@@ -11,4 +11,5 @@ export interface INewManOpts {
     iteractions: number;
     delay: number;
     data: string;
+    workingDirectory: string;
 }

@@ -36,6 +36,7 @@ The extension can be personalized using the following settings:
   "postman.showProgressInToolbar": true,
   "postman.testDefaultDelay": 0,
   "postman.testDefaultIterations": 1,
+  "postman.workingDirectory": ".",
 ```
 
 Where:
@@ -46,6 +47,7 @@ Where:
 - `postman.showProgressInToolbar`: Show or hide the progress and results from the bottom toolbar.
 - `postman.testDefaultDelay`: Set default delay for tests when asking questions.
 - `postman.testDefaultIterations`: Set default iteractions for tests when asking questions.
+- `postman.workingDirectory`: Set the path of the working directory to use while reading files with relative paths.
 
 ## Future features
 
