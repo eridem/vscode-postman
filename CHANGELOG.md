@@ -1,4 +1,4 @@
-### Unreleased
+### 2.1.1
 
 - Feature: Question Mode now prompts for **extra Newman arguments** via a checkbox list (`--insecure` to disable SSL validation, `--bail`, `--ignore-redirects`, `--verbose`). Selections are remembered per workspace between sessions, so testing endpoints that use self-signed certificates just needs `--insecure` ticked once. [#20](https://github.com/eridem/vscode-postman/issues/20)
 - Feature: Question Mode now prompts for **global variables** before a run, so you can inject values like `token=abc123; host=https://example.com` without editing an environment file. [#15](https://github.com/eridem/vscode-postman/issues/15)
