@@ -18,14 +18,14 @@ permissions:
 
 jobs:
   release:
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - run: git checkout -B master
+      - run: git checkout -B main
 
       - uses: actions/setup-node@v6
         with:
@@ -90,7 +90,7 @@ jobs:
           git add package.json package-lock.json CHANGELOG.md
           git commit -m "chore: release v${NEW_VERSION}"
           git tag -a "v${NEW_VERSION}" -m "v${NEW_VERSION}"
-          git push origin master --follow-tags
+          git push origin main --follow-tags
 
       - name: Create GitHub release
         env:

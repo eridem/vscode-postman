@@ -20,7 +20,7 @@ friendly**: commit the exported JSON and every teammate gets the same tests with
 4. Answer the prompts. Results stream into the **Postman Results** output window and open as an
    HTML report.
 
-![Command palette image](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/command-palette.png)
+![Command palette image](https://raw.githubusercontent.com/eridem/vscode-postman/main/images/command-palette.png)
 
 ## Features
 
@@ -45,7 +45,7 @@ friendly**: commit the exported JSON and every teammate gets the same tests with
   **Postman Results** output window and the status-bar toolbar as the run progresses.
 - **HTML report**: a formatted results document opens automatically when the run finishes.
 
-![Toolbar choosing](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/toolbar-choosing.gif)
+![Toolbar choosing](https://raw.githubusercontent.com/eridem/vscode-postman/main/images/toolbar-choosing.gif)
 
 ## Question Mode walkthrough
 
@@ -67,11 +67,11 @@ the environment / data steps are skipped when no such files are found):
 
 Results appear live in the output window:
 
-![Console running](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/console-running.gif)
+![Console running](https://raw.githubusercontent.com/eridem/vscode-postman/main/images/console-running.gif)
 
 ...and as an HTML document when the run completes:
 
-![Showing results](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/document-results.gif)
+![Showing results](https://raw.githubusercontent.com/eridem/vscode-postman/main/images/document-results.gif)
 
 ## Storing requests in your repository
 
@@ -194,7 +194,7 @@ Reference `{{username}}` / `{{role}}` in your requests and set **Iterations** to
 different pair each run.
 
 > **More examples on GitHub.** The repository's
-> [`examples/`](https://github.com/eridem/vscode-postman/tree/master/examples) folder has larger
+> [`examples/`](https://github.com/eridem/vscode-postman/tree/main/examples) folder has larger
 > ready-to-run collections covering Basic Auth, multipart form-data, and `v1` / `v2.0` format
 > compatibility, with step-by-step notes.
 
@@ -225,9 +225,9 @@ Personalize the extension with the following settings (shown with their defaults
 In the Postman app, export a collection or environment to a `.json` file and save it into your
 workspace folder (or a subfolder). Postman Runner picks it up automatically.
 
-![Exporting collections image](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/export-collection.png)
+![Exporting collections image](https://raw.githubusercontent.com/eridem/vscode-postman/main/images/export-collection.png)
 
-![Exporting environments image](https://raw.githubusercontent.com/eridem/vscode-postman/master/images/export-environments.png)
+![Exporting environments image](https://raw.githubusercontent.com/eridem/vscode-postman/main/images/export-environments.png)
 
 ## Requirements
 
