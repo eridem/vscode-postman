@@ -17,3 +17,9 @@ tsconfig.json
 tslint.json
 package-lock.json
 vsc-extension-quickstart.md
+examples/**
+images/command-palette.png
+images/console-running.gif
+images/document-results.gif
+images/export-collection.png
+images/enxport-environment.png
