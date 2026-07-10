@@ -8,7 +8,7 @@ import { Config } from '../config';
 declare var require: any
 
 export class RunnerRunQuestionMode implements models.ICommand {
-    private _config: Config;
+    private _config!: Config;
 
     private COLLECTION_EXTENSION = "postman_collection.json";
     private COLLECTION_QUERY = `{**/*.${this.COLLECTION_EXTENSION},**/${this.COLLECTION_EXTENSION},${this.COLLECTION_EXTENSION}}`;
@@ -19,44 +19,58 @@ export class RunnerRunQuestionMode implements models.ICommand {
     private DATA_EXCLUDE_QUERY = `{${this.DEFAULT_EXCLUDES},${this.COLLECTION_EXTENSION},**/${this.COLLECTION_EXTENSION},**/*.${this.COLLECTION_EXTENSION},${this.ENVIRONMENT_EXTENSION},**/${this.ENVIRONMENT_EXTENSION},**/*.${this.ENVIRONMENT_EXTENSION}}`;
     private ALL_TEXT = '- ALL -';
     private NONE_TEXT = '- NONE -';
-    private DEFAULT_NR_INTERACTIONS: number;
-    private DEFAULT_WORKING_DIRECTORY: string;
-    private DEFAULT_DELAY: number;
+    private DEFAULT_NR_INTERACTIONS!: number;
+    private DEFAULT_WORKING_DIRECTORY!: string;
+    private DEFAULT_DELAY!: number;
 
-    private _toolbarItem: vscode.StatusBarItem;
+    private _toolbarItem!: vscode.StatusBarItem;
+    private _context!: vscode.ExtensionContext;
 
-    private _collectionFiles: Array<vscode.Uri>;
-    private _environmentFiles: Array<vscode.Uri>;
-    private _dataFiles: Array<vscode.Uri>;
+    private static NEWMAN_ARGS_STATE_KEY = 'newmanArgs';
+    private static NEWMAN_ARGS: Array<{ key: string; label: string; detail: string }> = [
+        { key: 'insecure', label: 'Disable SSL validation', detail: '--insecure' },
+        { key: 'bail', label: 'Stop on first failure', detail: '--bail' },
+        { key: 'ignoreRedirects', label: "Don't follow redirects", detail: '--ignore-redirects' },
+        { key: 'verbose', label: 'Verbose output', detail: '--verbose' }
+    ];
 
-    private _collectionFile: string;
-    private _folder: string;
-    private _environmentFile: string;
-    private _iteractions: number;
-    private _delay: number;
-    private _dataFile: string;
-    private _workingDirectory: string;
+    private _collectionFiles!: Array<vscode.Uri>;
+    private _environmentFiles!: Array<vscode.Uri>;
+    private _dataFiles!: Array<vscode.Uri>;
+
+    private _collectionFile!: string;
+    private _folder!: string | null;
+    private _environmentFile!: string | null;
+    private _iteractions!: number;
+    private _delay!: number;
+    private _dataFile!: string | null;
+    private _workingDirectory!: string;
+    private _globalVars!: Array<{ key: string; value: string }>;
+    private _newmanArgs!: string[];
 
     public cleanUp(): void {
         this._config = new Config();
         this.DEFAULT_DELAY = this._config.testDefaultDelay;
         this.DEFAULT_NR_INTERACTIONS = this._config.testDefaultIterations;
         this.DEFAULT_WORKING_DIRECTORY = this._config.defaultWorkingDirectory;
-        this._collectionFiles = null;
-        this._environmentFiles = null;
-        this._dataFiles = null;
-        this._collectionFile = null;
+        this._collectionFiles = [];
+        this._environmentFiles = [];
+        this._dataFiles = [];
+        this._collectionFile = '';
         this._folder = null;
         this._environmentFile = null;
-        this._iteractions = null;
-        this._delay = null;
+        this._iteractions = this.DEFAULT_NR_INTERACTIONS;
+        this._delay = this.DEFAULT_DELAY;
         this._dataFile = null;
-        this._workingDirectory = null;
+        this._workingDirectory = this.DEFAULT_WORKING_DIRECTORY;
+        this._globalVars = [];
+        this._newmanArgs = [];
     }
 
     public subscribe(context: vscode.ExtensionContext, toolbarItem: vscode.StatusBarItem) {
         console.log('Registering: RunnerRunQuestionMode');
         this._toolbarItem = toolbarItem;
+        this._context = context;
 
         let disposable = vscode.commands.registerCommand('extension.question-mode', () => {
             try {
@@ -72,8 +86,10 @@ export class RunnerRunQuestionMode implements models.ICommand {
                     .then(() => this.getDataFiles()
                     .then(() => this.askForDataFile()
                     .then(() => this.askForWorkingDirectory()
+                    .then(() => this.askForGlobalVars()
+                    .then(() => this.askForNewmanArgs()
                     .then(() => this.onDoneWithQuestions()
-                    ))))))))))).catch(e => console.error);
+                    ))))))))))))).catch(e => console.error);
             } catch (ex) {
                 console.error(ex);
             }
@@ -85,7 +101,7 @@ export class RunnerRunQuestionMode implements models.ICommand {
 
     private getOnlyFileNames(files: Array<vscode.Uri>) {
         // Get just names of files
-        let rootPath = vscode.workspace.rootPath;
+        let rootPath = vscode.workspace.rootPath ?? '';
         let fileNames = files.map((f) => f.fsPath.replace(rootPath, ""));
         let fileNamesSort = fileNames.sort(utils.sortTextAlphabeticallyFn);
         return fileNamesSort;
@@ -152,11 +168,11 @@ export class RunnerRunQuestionMode implements models.ICommand {
     }
 
     private getFoldersForVersion1(collection: any): Array<string> {
-        return collection.folders.map(f => f.name)
+        return collection.folders.map((f: any) => f.name)
     }
 
     private getFoldersForVersion2(collection: any): Array<string> {
-        return collection.item.filter(f => f.item).map(f => f.name)
+        return collection.item.filter((f: any) => f.item).map((f: any) => f.name)
     }
 
     private askForFolder(): Promise<void> {
@@ -283,15 +299,60 @@ export class RunnerRunQuestionMode implements models.ICommand {
                 placeHolder: `Working directory (default: ${this.DEFAULT_WORKING_DIRECTORY})`
             }).then((value) => {
                 // Save value
-                this._workingDirectory = value;
-
                 if (value === null || value === undefined) {
                     this._workingDirectory = this.DEFAULT_WORKING_DIRECTORY;
+                } else if (value === '') {
+                    this._workingDirectory = '.';
+                } else {
+                    this._workingDirectory = value;
                 }
 
-                if (value === '') {
-                    this._workingDirectory = '.'
+                resolve();
+            });
+        })
+    }
+
+    private askForGlobalVars(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            vscode.window.showInputBox({
+                prompt: 'Global variables (e.g. token=abc123; host=https://example.com)',
+                placeHolder: 'key=value; key=value (leave empty for none)'
+            }).then((value) => {
+                if (value === null || value === undefined) {
+                    return reject();
                 }
+
+                // Save value
+                this._globalVars = utils.parseGlobalVars(value);
+
+                resolve();
+            });
+        })
+    }
+
+    private askForNewmanArgs(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            let savedKeys = this._context.workspaceState.get<string[]>(RunnerRunQuestionMode.NEWMAN_ARGS_STATE_KEY, []);
+
+            let items: Array<vscode.QuickPickItem & { key: string }> = RunnerRunQuestionMode.NEWMAN_ARGS.map((arg) => ({
+                key: arg.key,
+                label: arg.label,
+                detail: arg.detail,
+                picked: savedKeys.indexOf(arg.key) !== -1
+            }));
+
+            vscode.window.showQuickPick(items, {
+                canPickMany: true,
+                placeHolder: 'Extra arguments (leave all unchecked for none)'
+            }).then((selected) => {
+                // Escape/cancel returns undefined; an empty array is a valid "none selected".
+                if (selected === undefined) {
+                    return reject();
+                }
+
+                // Save value
+                this._newmanArgs = selected.map((item) => item.key);
+                this._context.workspaceState.update(RunnerRunQuestionMode.NEWMAN_ARGS_STATE_KEY, this._newmanArgs);
 
                 resolve();
             });
@@ -306,7 +367,9 @@ export class RunnerRunQuestionMode implements models.ICommand {
             iteractions: this._iteractions,
             delay: this._delay,
             data: this._dataFile,
-            workingDirectory: this._workingDirectory
+            workingDirectory: this._workingDirectory,
+            globalVars: this._globalVars,
+            newmanArgs: this._newmanArgs
         }
 
         newman.execNewman(newmanOptions, this._toolbarItem, this._config);

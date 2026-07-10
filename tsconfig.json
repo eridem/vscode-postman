@@ -1,16 +1,25 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es6",
-        "outDir": "out",
+        "target": "ES2020",
         "lib": [
-            "es6"
+            "ES2020"
         ],
+        "outDir": "dist",
+        "rootDir": ".",
         "sourceMap": true,
-        "rootDir": "."
+        "strict": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "types": [
+            "node"
+        ]
     },
     "exclude": [
         "node_modules",
-        ".vscode-test"
+        ".vscode-test",
+        "dist",
+        "out"
     ]
 }

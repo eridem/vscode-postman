@@ -1,5 +1,9 @@
 out
+dist
 node_modules
 
 */**/Thumbs.db
 *.vsix
+.claude/settings.local.json
+.DS_Store
+CLAUDE.md

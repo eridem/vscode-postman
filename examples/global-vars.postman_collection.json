@@ -1,0 +1,57 @@
+{
+	"info": {
+		"name": "Global Variables (v2.1)",
+		"_postman_id": "c9d4e2a7-1b6f-4e3a-9d52-7a0c8f2b3e14",
+		"description": "Demonstrates injecting global variables before a run (issue #15). The request echoes a `token` query parameter populated from a `token` global variable, and the tests assert the echoed value matches the global scope. Provide the value at the 'Global variables' prompt in Question Mode (e.g. `token=abc123`), or via Newman's `globalVar` option. Targets the public https://postman-echo.com service, so no credentials are required.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Echo global token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test('status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test('a global token was provided', function () {",
+							"    pm.expect(pm.globals.get('token'), 'set a `token` global variable before running').to.be.a('string').and.not.empty;",
+							"});",
+							"",
+							"pm.test('server echoes the injected global token', function () {",
+							"    const body = pm.response.json();",
+							"    pm.expect(body.args.token).to.eql(pm.globals.get('token'));",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://postman-echo.com/get?token={{token}}",
+					"protocol": "https",
+					"host": [
+						"postman-echo",
+						"com"
+					],
+					"path": [
+						"get"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "{{token}}"
+						}
+					]
+				},
+				"description": "Echoes back the `token` query parameter, which is populated from the `token` global variable."
+			}
+		}
+	]
+}

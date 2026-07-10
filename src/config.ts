@@ -11,13 +11,13 @@ export class Config {
     private _CONFIG_TEST_DEFAULT_ITERATIONS: string = 'testDefaultIterations';
     private _CONFIG_WORKING_DIRECTORY: string = "workingDirectory"
 
-    private _workspaceConfiguration: vscode.WorkspaceConfiguration = null;
+    private _workspaceConfiguration: vscode.WorkspaceConfiguration | null = null;
 
     private get WorkspaceConfiguration(): vscode.WorkspaceConfiguration {
         if (!this._workspaceConfiguration) {
             this._workspaceConfiguration = vscode.workspace.getConfiguration(this._CONFIG_MAIN_KEY);
         }
-        return this._workspaceConfiguration;
+        return this._workspaceConfiguration!;
     }
 
     public get showRunInfoMessage(): boolean {

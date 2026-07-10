@@ -1,3 +1,13 @@
+### Unreleased
+
+- Feature: Question Mode now prompts for **extra Newman arguments** via a checkbox list (`--insecure` to disable SSL validation, `--bail`, `--ignore-redirects`, `--verbose`). Selections are remembered per workspace between sessions, so testing endpoints that use self-signed certificates just needs `--insecure` ticked once. [#20](https://github.com/eridem/vscode-postman/issues/20)
+- Feature: Question Mode now prompts for **global variables** before a run, so you can inject values like `token=abc123; host=https://example.com` without editing an environment file. [#15](https://github.com/eridem/vscode-postman/issues/15)
+- Feature: the output now lists each request's **headers**, synthesizing the `Content-Type: multipart/form-data` entry for `formdata` bodies that Newman only adds at the transport layer. [#26](https://github.com/eridem/vscode-postman/issues/26)
+- Improvement: migrate build to esbuild (bundles to `dist/extension.js`) and lint to ESLint (flat config); drop TSLint, the deprecated `vscode` module in favor of `@types/vscode`, and the `.nvmrc`/`postinstall` legacy setup.
+- Improvement: add GitHub Actions CI and Release workflows, and modernize the toolchain (TypeScript strict mode, Prettier, Node test runner).
+- Improvement: upgrade `newman` to `6.2.2`, `shelljs` to `0.10.0`, and TypeScript to `6.0.3`. Added a `newman-reporter-html` override so the HTML reporter resolves cleanly against Newman 6.
+- Improvement: add an `examples/` folder with a modern Collection Format v2.1.0 collection, environment, and iteration-data file (Postman Echo) to try out and smoke-test the extension.
+
 ### 2.0.0
 
 - Improvement: Use `newman: 5.0.0`.

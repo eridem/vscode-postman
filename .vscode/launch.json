@@ -1,20 +1,20 @@
 // A launch configuration that compiles the extension and then opens it inside a new window
 {
-    "version": "0.1.0",
+    "version": "0.2.0",
     "configurations": [
         {
-            "type": "extensionHost",
-            "request": "launch",
-            "name": "Launch Extension",
-            "runtimeExecutable": "${execPath}",
             "args": [
+                "${workspaceFolder}/examples",
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ],
+            "name": "Launch Extension",
             "outFiles": [
-                "${workspaceFolder}/out/**/*.js"
+                "${workspaceFolder}/dist/**/*.js"
             ],
-            "preLaunchTask": "npm",
-            "sourceMaps": true,
+            "preLaunchTask": "watch",
+            "request": "launch",
+            "type": "extensionHost",
+            "runtimeExecutable": "${execPath}"
         }
     ]
 }

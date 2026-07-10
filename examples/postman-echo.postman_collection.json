@@ -1,0 +1,321 @@
+{
+	"info": {
+		"name": "Postman Echo (v2.1)",
+		"_postman_id": "b2c0e7a1-9f3d-4a5e-8c21-6f0d5e4b1a20",
+		"description": "A modern Postman Collection (schema v2.1.0) that exercises the extension against the public https://postman-echo.com service. Uses the `pm.*` sandbox API for assertions. No credentials required. Every request has tests so you can see passes and failures in the Postman Results output.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Basics",
+			"item": [
+				{
+					"name": "GET request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('echoes the query parameter', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.args.foo).to.eql('bar');",
+									"});",
+									"",
+									"pm.test('response time is below 2s', function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/get?foo=bar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"get"
+							],
+							"query": [
+								{
+									"key": "foo",
+									"value": "bar"
+								}
+							]
+						},
+						"description": "A simple GET that echoes back the query string."
+					}
+				},
+				{
+					"name": "POST JSON body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('echoes the JSON body back', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.data.name).to.eql('vscode-postman');",
+									"    pm.expect(body.data.awesome).to.be.true;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"vscode-postman\",\n    \"awesome\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/post",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"post"
+							]
+						},
+						"description": "POSTs a JSON payload; Postman Echo returns it under `data`."
+					}
+				},
+				{
+					"name": "Request headers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('custom header is echoed', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.headers['x-vscode-postman']).to.eql('hello');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Vscode-Postman",
+								"value": "hello"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/headers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"headers"
+							]
+						},
+						"description": "Sends a custom header and asserts Postman Echo reflects it."
+					}
+				}
+			],
+			"description": "GET, POST and header round-trips."
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Basic Auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('authenticated', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.authenticated).to.be.true;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "postman",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/basic-auth",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"basic-auth"
+							]
+						},
+						"description": "Uses the credentials postman/password expected by the Postman Echo basic-auth endpoint."
+					}
+				}
+			],
+			"description": "Authentication flows."
+		},
+		{
+			"name": "Iteration data",
+			"item": [
+				{
+					"name": "POST from data file",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('sends the current data row', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.data.username).to.eql(pm.iterationData.get('username'));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"{{username}}\",\n    \"role\": \"{{role}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/post",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"post"
+							]
+						},
+						"description": "Pair this request with iteration-data.json (choose it as the Data file, and set iterations to 3) to see one run per row."
+					}
+				}
+			],
+			"description": "Demonstrates data-driven runs. Run with the bundled iteration-data.json."
+		},
+		{
+			"name": "Multipart form-data",
+			"item": [
+				{
+					"name": "POST form-data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('echoes the form fields', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.form.field1).to.eql('value1');",
+									"    pm.expect(body.form.field2).to.eql('value2');",
+									"});",
+									"",
+									"// Issue #26: Newman injects the multipart Content-Type (with the",
+									"// generated boundary) at the transport layer, so the server really",
+									"// receives it even though it is absent from the declared headers.",
+									"pm.test('server receives a multipart/form-data Content-Type', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.headers['content-type']).to.match(/^multipart\\/form-data; boundary=/);",
+									"});",
+									"",
+									"pm.test('declared request headers omit Content-Type', function () {",
+									"    pm.expect(pm.request.headers.has('Content-Type')).to.be.false;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "field1",
+									"value": "value1",
+									"type": "text"
+								},
+								{
+									"key": "field2",
+									"value": "value2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/post",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"post"
+							]
+						},
+						"description": "POSTs a multipart/form-data body. Postman Echo returns the fields under `form` and the received headers under `headers`. When run through the extension, the Postman Results output shows a synthesized `Content-Type: multipart/form-data` header (issue #26), because Newman only adds the real header (with boundary) at send time."
+					}
+				}
+			],
+			"description": "Exercises multipart/form-data bodies and the issue #26 Content-Type behaviour."
+		}
+	]
+}

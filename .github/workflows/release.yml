@@ -1,0 +1,99 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Version bump type
+        required: true
+        type: choice
+        default: patch
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - run: git checkout -B master
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run check-types
+      - run: node esbuild.js
+      - run: npm test
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version
+        id: bump
+        run: |
+          npm version "${{ inputs.bump }}" --no-commit-hooks --no-git-tag-version
+          echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Move Unreleased changelog entry to the new version
+        env:
+          NEW_VERSION: ${{ steps.bump.outputs.version }}
+        run: |
+          node -e '
+            const fs = require("fs");
+            const version = process.env.NEW_VERSION;
+            const content = fs.readFileSync("CHANGELOG.md", "utf8");
+            const lines = content.split("\n");
+            const startIdx = lines.findIndex(l => l.trim() === "### Unreleased");
+            if (startIdx === -1) {
+              console.error("No \"### Unreleased\" section found in CHANGELOG.md. Add one with your release notes before dispatching this workflow.");
+              process.exit(1);
+            }
+            let endIdx = lines.findIndex((l, i) => i > startIdx && l.startsWith("### "));
+            if (endIdx === -1) endIdx = lines.length;
+            const notes = lines.slice(startIdx + 1, endIdx).join("\n").trim();
+            if (!notes) {
+              console.error("The \"### Unreleased\" section is empty. Add release notes before dispatching this workflow.");
+              process.exit(1);
+            }
+            lines[startIdx] = "### " + version;
+            fs.writeFileSync("CHANGELOG.md", lines.join("\n"));
+            fs.writeFileSync("release-notes.md", notes + "\n");
+          '
+
+      - name: Package extension
+        run: npm run package
+
+      - name: Publish to VS Code Marketplace
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: npx vsce publish --packagePath *.vsix
+
+      - name: Commit version bump and tag
+        env:
+          NEW_VERSION: ${{ steps.bump.outputs.version }}
+        run: |
+          git add package.json package-lock.json CHANGELOG.md
+          git commit -m "chore: release v${NEW_VERSION}"
+          git tag "v${NEW_VERSION}"
+          git push origin master --follow-tags
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEW_VERSION: ${{ steps.bump.outputs.version }}
+        run: gh release create "v${NEW_VERSION}" *.vsix --title "v${NEW_VERSION}" --notes-file release-notes.md

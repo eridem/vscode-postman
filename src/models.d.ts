@@ -6,10 +6,12 @@ export interface ICommand {
 
 export interface INewManOpts {
     collection: string;
-    folder: string;
-    environment: string;
+    folder: string | null;
+    environment: string | null;
     iteractions: number;
     delay: number;
-    data: string;
+    data: string | null;
     workingDirectory: string;
+    globalVars: Array<{ key: string; value: string }>;
+    newmanArgs: string[];
 }

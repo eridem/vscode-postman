@@ -22,7 +22,7 @@
   "homepage": "https://eridem.net/postman-runner-visual-studio-code-extension",
   "icon": "images/icon.png",
   "engines": {
-    "vscode": "^1.5.0"
+    "vscode": "^1.85.0"
   },
   "categories": [
     "Other"
@@ -35,17 +35,10 @@
     "type": "git",
     "url": "https://github.com/eridem/vscode-postman.git"
   },
-  "badges": [
-    {
-      "url": "https://david-dm.org/eridem/vscode-postman/dev-status.svg",
-      "href": "https://david-dm.org/eridem/vscode-postman",
-      "description": "Dependency Status"
-    }
-  ],
   "activationEvents": [
     "onCommand:extension.question-mode"
   ],
-  "main": "./out/src/extension",
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -104,22 +97,37 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "tsc -p ./",
-    "compile": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
+    "vscode:prepublish": "npm run check-types && node esbuild.js --production",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch -p ./",
+    "check-types": "tsc --noEmit -p ./",
+    "lint": "eslint src",
+    "test": "node --import tsx --test src/test/*.test.ts",
     "package": "vsce package"
   },
   "devDependencies": {
-    "@types/node": "^16.3.0",
-    "prettier": "^2.3.2",
-    "tslint": "^6.1.3",
-    "typescript": "^4.3.5",
-    "vsce": "^1.95.1",
-    "vscode": "^1.1.37"
+    "@types/node": "^26.1.1",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^8.63.0",
+    "@typescript-eslint/parser": "^8.63.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.28.1",
+    "eslint": "^10.6.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.9.5",
+    "tsx": "^4.23.0",
+    "typescript": "^6.0.3"
   },
   "dependencies": {
-    "newman": "^5.2.4",
+    "newman": "^6.2.2",
     "newman-reporter-html": "github:eridem/newman-reporter-html#v1.0.6",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.10.0"
+  },
+  "overrides": {
+    "newman-reporter-html": {
+      "newman": "$newman"
+    }
   }
 }

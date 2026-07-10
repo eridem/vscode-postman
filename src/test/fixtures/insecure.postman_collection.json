@@ -1,0 +1,42 @@
+{
+	"info": {
+		"name": "Insecure SSL (v2.1)",
+		"_postman_id": "e2f7a1c3-9d84-4b52-8a17-3c6e0f9b2d45",
+		"description": "Fixture for issue #20. Requests a local HTTPS endpoint served with a self-signed certificate at `https://localhost:{{port}}/`. Reaching it requires disabling SSL validation (the `--insecure` / `insecure: true` option); otherwise Newman aborts the request with a certificate error. The `port` global variable is injected by the test.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get over self-signed HTTPS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test('status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:{{port}}/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						""
+					]
+				},
+				"description": "Hits the local self-signed HTTPS server started by the test."
+			}
+		}
+	]
+}
