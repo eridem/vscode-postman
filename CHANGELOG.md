@@ -1,6 +1,7 @@
 ### Unreleased
 
 - Fix versioning system
+- Improvement: upgrade `undici` to `7.29.0`, `ip-address` to `10.4.0`, and `fast-uri` to `3.1.5`.
 
 ### 3.0.0
 
